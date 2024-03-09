@@ -160,11 +160,22 @@ class LinkedList {
     return sum / this.length;
   }
 
+    /** pivot(): given a value and a linked list, rearrange the items so that all the items with values less than the given value are in the first half, and items with values greater than or equal to the given value are in the second half. */
   pivot(val) {
-
+    let currentIdx = 0;
+    let secondHalf = new LinkedList([])
+    while (currentIdx < this.length){
+      if (this.getAt(currentIdx) >= val){
+        let savedVal = this.removeAt(currentIdx);
+        secondHalf.push(savedVal)
+      } else {
+        currentIdx += 1;
+      }
+    }
+    this.tail.next = secondHalf.head;
+    this.length = this.length + secondHalf.length;
   }
 }
-
 
 /** Node2: node for a doubly linked list. */
 
@@ -351,6 +362,7 @@ class DoublyLinkedList {
   }
 }
 
+
 function reverseInPlace(ll){
   if (ll.length === 1){
     return ll;
@@ -437,7 +449,6 @@ function sortlist(a, b, sortedList){
   return sortedList;
 }
 
- 
 function sort(a, b){
   //handler for sorting different types of linked lists
   if (a instanceof LinkedList && b instanceof LinkedList){
@@ -474,7 +485,7 @@ class CircularArray {
 }
 
 
-// function that takes two sorted linked lists and returns a new linked list in sorted order
 // pivot a singly linked list around a given value
-// create circular array
+  // if currentnode's value is greater than or equal to val, remove at index, and push
+// create circular array with some basic methods
 // create method to rotate circular array
