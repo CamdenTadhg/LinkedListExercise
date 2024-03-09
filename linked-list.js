@@ -355,49 +355,100 @@ function reverseInPlace(ll){
   if (ll.length === 1){
     return ll;
   }
+  //method if the list is a singly linked list
   if (ll instanceof LinkedList){
-    let head = ll.head;
-    let tail = ll.tail;
-    let currentIdx = ll.length - 1;
-    let currentNode = tail;
-    while (currentIdx > 0){
-      currentNode.next = ll._get(currentIdx - 1);
-      currentIdx -= 1;
-      currentNode = ll._get(currentIdx);
+    let current = ll.head;
+    let prev = null;
+
+    //flip list
+    while (current) {
+      let next = current.next;
+      current.next = prev;
+      prev = current;
+      current = next;
     }
-    ll.head = tail
+    //switch head and tail
+    let head = ll.head;
+    ll.head = prev;
+    ll.head = ll.tail;
     ll.tail = head;
-    ll.tail.next = null;
     return ll;
   }
   if (ll instanceof DoublyLinkedList){
-    console.log('doubly linked list type')
+    //method if the list is a doubly linked list
     let head = ll.head;
     let tail = ll.tail;
-    let currentIdx = ll.length - 1;
-    let currentNode = ll.tail;
-    currentNode.next = currentNode.prev;
-    currentNode.prev = null;
-    currentIdx -= 1;
-    currentNode = currentNode.next;
-    while (currentIdx > 0){
-      let savedNode = currentNode.next;
-      currentNode.next = currentNode.prev;
-      currentNode.prev = savedNode;
-      currentIdx -= 1;
-      currentNode = currentNode.next;
+    let current = ll.head;
+    
+    //flip list
+    while (current) {
+      let next = current.next;
+      current.next = current.prev;
+      current.prev = next;
+      current = next;
     }
-    let savedNode = currentNode.next;
-    currentNode.next = null;
-    currentNode.prev = savedNode;
+
+    //switch head and tail
     ll.head = tail;
     ll.tail = head;
     return ll;
   }
 }
 
-function sort(a, b){
+function sortlist(a, b, sortedList){
+  //sorting algorithm for all list types
+  let currentA = a.head;
+  let currentB = b.head; 
+  //sort values inside lists
+  while(currentA && currentB){
+    if (currentA.val <= currentB.val){
+      console.log('while A <= B')
+      console.log('currentA = ', currentA);
+      console.log('currentB = ', currentB);
+      sortedList.push(currentA.val);
+      currentA = currentA.next;
+    } else if (currentB.val < currentA.val){
+      console.log('while B < A');
+      console.log('currentA = ', currentA);
+      console.log('currentB = ', currentB);
+      sortedList.push(currentB.val);
+      currentB = currentB.next;
+    }
+  }
+  //fill in a values if a list contains final values
+  if (currentA){
+    while (currentA) {
+      console.log('final As');
+      console.log('currentA = ', currentA);
+      console.log('currentB = ', currentB);
+      sortedList.push(currentA.val);
+      currentA = currentA.next;
+    }
+    //fill in b values if b list contains final values
+  } else if (currentB){
+    while (currentB) {
+      console.log('finalBs')
+      console.log('currentA = ', currentA);
+      console.log('currentB = ', currentB);
+      sortedList.push(currentB.val);
+      currentB = currentB.next;
+    }
+  }
+  return sortedList;
+}
 
+ 
+function sort(a, b){
+  //handler for sorting different types of linked lists
+  if (a instanceof LinkedList && b instanceof LinkedList){
+    let sortedList = new LinkedList([]);
+    return sortlist(a, b, sortedList);
+  } else if (a instanceof DoublyLinkedList && b instanceof DoublyLinkedList){
+    let sortedList = new DoublyLinkedList([]);
+    return sortlist(a, b, sortedList);
+  }
+  else {throw new Error('lists must be of the same type')
+  }
 }
 
 class CircularArray {
@@ -423,8 +474,6 @@ class CircularArray {
 }
 
 
-// Doubly linked lists with all the same methods
-// function to reverse a linked list in place (do not create a new list)
 // function that takes two sorted linked lists and returns a new linked list in sorted order
 // pivot a singly linked list around a given value
 // create circular array
