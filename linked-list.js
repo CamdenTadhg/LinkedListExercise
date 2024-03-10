@@ -463,29 +463,66 @@ function sort(a, b){
 }
 
 class CircularArray {
-  constructor(){
+  constructor(capacity){
+    this.array = new Array(capacity);
+    this.capacity = capacity;
+    this.length = 0;
+    this.startIndex = 0;
+  }
 
+  addItem(val){
+    console.log('entering addItem')
+    let currentIndex = this.startIndex;
+    let counter = 0;
+    while (counter < this.capacity){
+      console.log('currentIndex = ', currentIndex);
+      console.log('this.array[currentIndex] = ', this.getByIndex(currentIndex));
+      if (!this.getByIndex(currentIndex)){
+        this.setByIndex(currentIndex, val);
+        this.length += 1;
+        return this;
+      }
+      currentIndex += 1;
+      counter += 1;
+    }
+    throw new Error('CircularArray is full');
   }
 
   printArray(){
-
+    for (let item in this.array){
+      console.log(this.array[item]);
+    }
   }
 
-  getByIndex(){
-
+  getByIndex(idx){
+    console.log('entering getByIndex')
+    if (this.length === 0){
+      console.log('entering if statement');
+      return undefined;
+    } else {
+      console.log('entering else statement');
+      const convertedIdx = idx % this.capacity;
+      console.log('convertedIdx = ', convertedIdx);
+      return this.array[convertedIdx];
+    }
   }
 
-  addItem(){
-
+  setByIndex(idx, val){
+    console.log('entering setBy Index')
+    if (this.length === 0){
+      console.log('entering if statement');
+      this.array[this.startIndex] = val;
+    } else {
+      console.log('entering else statement');
+      const convertedIdx = idx % this.capacity;
+      console.log('convertedIdx = ', convertedIdx)
+      this.array[convertedIdx] = val;
+    }
   }
 
-  rotate(){
-
+  rotate(val){
   }
 }
 
 
-// pivot a singly linked list around a given value
-  // if currentnode's value is greater than or equal to val, remove at index, and push
-// create circular array with some basic methods
 // create method to rotate circular array
