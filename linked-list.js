@@ -471,12 +471,9 @@ class CircularArray {
   }
 
   addItem(val){
-    console.log('entering addItem')
     let currentIndex = this.startIndex;
     let counter = 0;
-    while (counter < this.capacity){
-      console.log('currentIndex = ', currentIndex);
-      console.log('this.array[currentIndex] = ', this.getByIndex(currentIndex));
+    while (counter <= this.capacity - 1){
       if (!this.getByIndex(currentIndex)){
         this.setByIndex(currentIndex, val);
         this.length += 1;
@@ -495,34 +492,52 @@ class CircularArray {
   }
 
   getByIndex(idx){
-    console.log('entering getByIndex')
     if (this.length === 0){
-      console.log('entering if statement');
       return undefined;
     } else {
-      console.log('entering else statement');
-      const convertedIdx = idx % this.capacity;
-      console.log('convertedIdx = ', convertedIdx);
+      const convertedIdx = (this.startIndex + idx) % this.capacity;
       return this.array[convertedIdx];
     }
   }
 
   setByIndex(idx, val){
-    console.log('entering setBy Index')
     if (this.length === 0){
-      console.log('entering if statement');
       this.array[this.startIndex] = val;
     } else {
-      console.log('entering else statement');
-      const convertedIdx = idx % this.capacity;
-      console.log('convertedIdx = ', convertedIdx)
+      const convertedIdx = (this.startIndex + idx) % this.capacity;
       this.array[convertedIdx] = val;
     }
   }
-
+ //rotates circular array into higher values with positive numbers and lower values with negative numbers. 
   rotate(val){
+    if (val === 0){
+      return;
+    }
+    if (val > 0) {
+      const rotationFactor = (this.capacity + val) % this.capacity;
+      this.reverse(this.startIndex, this.startIndex + rotationFactor);
+      this.reverse(this.startIndex + rotationFactor + 1, this.capacity - 1);
+      this.reverse(this.startIndex + 1, this.capacity - 1)
+    }
+    if (val < 0) {
+      const rotationFactor = (this.capacity - val) % this.capacity;
+      this.reverse(this.startIndex, this.capacity - 1);
+      this.reverse(this.startIndex, this.startIndex + rotationFactor - 1);
+      this.reverse(this.startIndex + rotationFactor, this.capacity - 1);
+    }
+  }
+
+  //given a start and end index, reverses that section of the array
+  reverse(start, end){
+    if (start < 0 || end > this.capacity - 1){
+      throw new Error('entries outside array capacity.')
+    }
+    while (start < end){
+      const temp = this.array[start];
+      this.array[start] = this.array[end];
+      this.array[end] = temp;
+      start += 1;
+      end -= 1;
+    }
   }
 }
-
-
-// create method to rotate circular array
